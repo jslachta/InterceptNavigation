@@ -1,4 +1,5 @@
 ﻿using System;
+using InterceptNavigation.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +12,7 @@ namespace InterceptNavigation
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new ANavigationPage(new MainPage());
         }
 
         protected override void OnStart()

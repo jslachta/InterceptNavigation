@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controls:AContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:controls="clr-namespace:InterceptNavigation.Controls"
+                       x:Class="InterceptNavigation.Page1"
+                       Title="Page1" NavigationClicked="OnNavigationClicked">
+    
+    <Label Text="Welcome to Page1" HorizontalOptions="Center" VerticalOptions="Center"/>
+    
+</controls:AContentPage>

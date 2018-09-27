@@ -1,18 +1,18 @@
-﻿using AdditelLink.Controls;
-using AdditelLink.Droid.Renderers;
-using Android.Content;
+﻿using Android.Content;
 using Android.Widget;
+using InterceptNavigation.Controls;
+using InterceptNavigation.Droid.Renderers;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android.AppCompat;
 using AWV7 = Android.Support.V7.Widget;
 
-[assembly: ExportRenderer(typeof(ALNavigationPage), typeof(ALNavigationPageRenderer))]
-namespace AdditelLink.Droid.Renderers
+[assembly: ExportRenderer(typeof(ANavigationPage), typeof(ANavigationPageRenderer))]
+namespace InterceptNavigation.Droid.Renderers
 {
-    public class ALNavigationPageRenderer : NavigationPageRenderer
+    public class ANavigationPageRenderer : NavigationPageRenderer
     {
-        public ALNavigationPageRenderer(Context context)
+        public ANavigationPageRenderer(Context context)
             : base(context)
         {
             _context = context;
@@ -33,6 +33,7 @@ namespace AdditelLink.Droid.Renderers
         {
             base.OnLayout(changed, l, t, r, b);
 
+            // Center title
             for (int i = 0; i < _toolBar?.ChildCount; i++)
             {
                 if (_toolBar.GetChildAt(i) is TextView titleView)
@@ -46,8 +47,8 @@ namespace AdditelLink.Droid.Renderers
 
         protected override Task<bool> OnPushAsync(Page view, bool animated)
         {
-            if (view is ALContentPage aPage &&
-                aPage.IsNavigationOverride)
+            // Override NavigationClick event here
+            if (view is AContentPage aPage)
             {
                 _toolBar.NavigationClick -= OnNavigationClick;
                 _toolBar.NavigationClick += OnNavigationClick;
@@ -58,19 +59,23 @@ namespace AdditelLink.Droid.Renderers
 
         private async void OnNavigationClick(object sender, AWV7.Toolbar.NavigationClickEventArgs e)
         {
-            if (Element?.CurrentPage is ALContentPage aPage &&
-                aPage.IsNavigationOverride)
+            if (Element?.CurrentPage is AContentPage aPage &&
+                aPage.InvokeNavigationClick())
             {
-                aPage.InvokeBackCommand();
+                // NavigationClick is intercepted, do nothing and return
+                return;
             }
+            // if NavigationClick is not override, do the navigation here
             else if (Element?.Navigation.NavigationStack.Count > 1)
             {
                 await Element.Navigation.PopAsync();
             }
+            // when navigation page is the MasterDetailPage's Detail
             else if (Element?.Parent is MasterDetailPage MDPage)
             {
                 MDPage.IsPresented = !MDPage.IsPresented;
             }
+            // otherwise i think the back button shoud not appear and be clicked
             else
             {
                 System.Diagnostics.Debug.WriteLine("Unexcepted Click");

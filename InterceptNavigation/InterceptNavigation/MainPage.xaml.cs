@@ -13,5 +13,10 @@ namespace InterceptNavigation
         {
             InitializeComponent();
         }
+
+        void OnClicked(object sender, System.EventArgs e)
+        {
+            Navigation.PushAsync(new Page1());
+        }
     }
 }
